@@ -4,8 +4,8 @@ import pyroomacoustics as pra
 from scipy.io import wavfile
 
 # The desired reverberation time and dimensions of the room
-rt60_tgt = (0.3577777777777778)  # seconds
-room_dim = [6, 3, 4]  # meters
+rt60_tgt = (0.43513513513513513)  # seconds
+room_dim = [6, 5, 4]  # meters
 
 # import a mono wavfile as the source signal
 # the sampling frequency should match that of the room
@@ -18,22 +18,22 @@ m = pra.make_materials(
     floor="ceramic_tiles",
     east="ceramic_tiles",
     west="ceramic_tiles",
-    north="ceramic_tiles",
-    south="ceramic_tiles",
+    north="rough_concrete",
+    south="rough_concrete",
 )
 # Create the room
 room = pra.ShoeBox(
-    room_dim, fs=fs, materials=m, max_order=17, air_absorption=True, ray_tracing=True
+    room_dim, fs=fs, materials=m, max_order=17
 )
 
 # place the source in the room
-room.add_source([3, 1.5, 1.8], signal=audio, delay=0.5)
+room.add_source([3, 2.5, 1.8], signal=audio, delay=0.5)
 
 # define the locations of the microphones
 mic_locs = np.c_[
-    [3, 3, 1.8],
-    [6, 3, 1.8],
-    [6, 1.5, 1.8],
+    [3, 5, 1.8],
+    [6, 2.5, 1.8],
+    [6, 5, 1.8],
 ]
 
 # finally place the array in the room
@@ -43,7 +43,7 @@ room.add_microphone_array(mic_locs)
 room.simulate()
 
 room.mic_array.to_wav(
-    f"BeepToilet.wav",
+    f"BeepBar.wav",
     norm=True,
     bitdepth=np.int16,
 )
